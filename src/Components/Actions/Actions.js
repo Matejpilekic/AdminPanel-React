@@ -34,6 +34,9 @@ export class Actions extends Component {
           if(isNaN(data.pin)|| isNaN(data.type) || data.name==='' ||  isNaN(data.controller_id) ){
             alert("Popunite polja");
           }
+          else if(data.pin < 2 || data.pin > 13){
+            alert("Unesite ispravan pin");
+          }
           else{
             axios
             .post(`${ApiUrl()}/actions/`, data,{headers: headers})

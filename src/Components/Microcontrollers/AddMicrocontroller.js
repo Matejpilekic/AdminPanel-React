@@ -20,7 +20,7 @@ export class AddMicrocontroller extends Component {
 
   addMicrocontroller =(e)=>{
 
-    var data={name: this.state.name, token: this.state.token, domain: this.state.domain, port: parseInt(this.state.port)};
+    var data={name: this.state.name, token: this.state.token, domain: this.state.domain, port: parseInt(this.state.port),number_of_pins: 13};
       //console.log(data);
 
     if(data.name === '' || data.token === '' || data.domain ==='' || isNaN(data.port)){
