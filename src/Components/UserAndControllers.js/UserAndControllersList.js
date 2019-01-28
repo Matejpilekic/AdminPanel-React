@@ -2,15 +2,23 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {uid} from 'react-uid';
 import ApiUrl from '../../ApiUrl';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export class UserAndControllersList extends Component {
 
     constructor(props){
         super(props);
         this.state={
-            usersAndControllers: []
+            usersAndControllers: [],
+            modal: false
         }
-      }
+    }
+
+    toggle=()=> {
+        this.setState({
+          modal: !this.state.modal
+        });
+    }
 
     componentDidMount(){
 
@@ -49,9 +57,11 @@ export class UserAndControllersList extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.post(`${ApiUrl()}/controllers/unbind`,{user_id: idu, controller_id: idc},{headers: headers})
-          .then(res => this.setState({ usersAndControllers: [...this.state.usersAndControllers.filter(userAM => userAM.user.id !== idu || userAM.micro_controller.id !== idc )] }))
+          .then(res => this.setState({ usersAndControllers: [...this.state.usersAndControllers.filter(userAM => userAM.user.id !== idu || userAM.micro_controller.id !== idc )],
+                                        modal: !this.state.modal
+        }))
           .catch(function (error) {
-            console.log(error);
+            //console.log(error);
             alert('Dogodila se greška');
         });
     }
@@ -65,7 +75,19 @@ export class UserAndControllersList extends Component {
             <td>{data.user.full_name}</td>
             <td>{data.user.email}</td>
             <td>{data.micro_controller.name}</td>
-            <td><button className="btn btn-secondary" onClick={this.unBind.bind(this, data.user.id, data.micro_controller.id)}>Odspoji korisnika</button></td>
+            <td>
+                <Button color="danger" onClick={this.toggle}>Odspoji korisnika</Button>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>Odspoji korisnika</ModalHeader>
+                <ModalBody>
+                    Jeste li sigurni da želite odspojiti korisnika {data.user.full_name} s mikrokontrolera {data.micro_controller.name}?
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.unBind.bind(this, data.user.id, data.micro_controller.id)}>Da odspoji korisnika</Button>{' '}
+                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                </ModalFooter>
+                </Modal>
+            </td> 
     </tr>);
 
     return (

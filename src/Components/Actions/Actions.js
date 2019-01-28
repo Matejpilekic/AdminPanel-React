@@ -46,9 +46,12 @@ export class Actions extends Component {
               if(response.status===200 || response.statusText==='OK'){
                   alert ("Uspijesno ste dodali akciju s id-om"+response.data.id+" imenom "+response.data.name+" vrstom "+response.data.type+" i pinom "+response.data.pin+" ");
               }
+              if(response.status===400){
+                alert('Zauzet pin na mikrokontroleru!');
+              }
             })
             .catch(error => {
-              alert('Pogreska prilikom kreiranja akcije!');
+                alert('Pogreska prilikom kreiranja akcije!');
             });
           }
           e.preventDefault();

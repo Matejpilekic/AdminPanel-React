@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ApiUrl from '../../ApiUrl';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export class Users extends Component {
     constructor(props){
         super(props);
         this.state={
-            users: []
+            users: [],
+            modal: false
         }
       }
+
+    toggle=()=> {
+        this.setState({
+          modal: !this.state.modal
+        });
+    }
 
     componentDidMount(){
 
@@ -47,7 +55,9 @@ export class Users extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.delete(`http://104.248.21.187:8080/admin/users/${id}`,{headers: headers})
-          .then(res => this.setState({ users: [...this.state.users.filter(user => user.id !== id)] }));
+          .then(res => this.setState({ users: [...this.state.users.filter(user => user.id !== id)],
+                                        modal: !this.state.modal
+        }));
     }
     
   render() {
@@ -58,7 +68,19 @@ export class Users extends Component {
             <td>{data.full_name}</td>
             <td>{data.email}</td>
             <td>{data.uuid}</td>
-            <td><button className="btn btn-secondary" onClick={this.delUser.bind(this, data.id)}>Obrisi</button></td>
+            <td>
+                <Button color="danger" onClick={this.toggle}>Obriši</Button>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>Obiši</ModalHeader>
+                <ModalBody>
+                    Jeste li sigurni da želite obrisati korisnika {data.full_name}?
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.delUser.bind(this, data.id)}>Da obriši</Button>{' '}
+                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                </ModalFooter>
+                </Modal>
+            </td> 
     </tr>);
 
     return (

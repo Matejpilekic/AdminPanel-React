@@ -2,11 +2,19 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import ApiUrl from '../../ApiUrl';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export class GetAllActions extends Component {
     state={
         actions: [],
-        microcontrollers: []
+        microcontrollers: [],
+        modal: false
+    }
+
+    toggle=()=> {
+        this.setState({
+          modal: !this.state.modal
+        });
     }
 
     componentDidMount(){
@@ -64,7 +72,9 @@ export class GetAllActions extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.delete(`${ApiUrl()}/actions/${id}`,{headers: headers})
-          .then(res => this.setState({ actions: [...this.state.actions.filter(action => action.id !== id)] }))
+          .then(res => this.setState({ actions: [...this.state.actions.filter(action => action.id !== id)],
+                                        modal: !this.state.modal
+        }))
           .catch(function (error) {
             console.log(error);
             alert('Dogodila se greška, nemožete obrisati tu akciju');
@@ -82,7 +92,19 @@ export class GetAllActions extends Component {
                     {if(datacontroller.id===data.controller_id) 
                         return datacontroller.name}
               )}</td>
-            <td><button className="btn btn-secondary" onClick={this.delAction.bind(this, data.id)}>Obrisi</button></td>
+            <td>
+                <Button color="danger" onClick={this.toggle}>Obriši</Button>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>Obiši</ModalHeader>
+                <ModalBody>
+                    Jeste li sigurni da želite obrisati akciju {data.name}?
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.delAction.bind(this, data.id)}>Da obriši</Button>{' '}
+                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                </ModalFooter>
+                </Modal>
+            </td>  
             <td><button className='btn btn-secondary colortextbtn'><Link
                 to={{
                     pathname: "/addAction",
