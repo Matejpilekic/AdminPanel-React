@@ -79,12 +79,17 @@ class Login extends Component {
 
       })
       .catch(error => {
-        this.setState({ 
-          visible: true,
-          error_message: 'Pogreska prilikom logiranja, neispravno uneseni podatci!'
-        });
-        //console.log(error);
-        //alert('Pogreska prilikom logiranja!');
+        if(error.response.status===401){
+          this.setState({ 
+            visible: true,
+            error_message: 'Pogreska prilikom logiranja, neispravni uneseni podatci!'
+          });
+        }else{
+          this.setState({ 
+            visible: true,
+            error_message: `Pogreska !${error.response.data.message}`
+          });
+        }
       });
 
     }
