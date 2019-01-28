@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import ApiUrl from '../ApiUrl';
+import { Alert } from 'reactstrap';
 
 
 class Login extends Component {
@@ -15,7 +16,9 @@ class Login extends Component {
         full_name: '',
         email: '',
         login_token: ''
-      }
+      },
+      visible: false,
+      error_message: ''
     }
 
     // This binding is necessary to make `this` work in the callback
@@ -34,7 +37,14 @@ class Login extends Component {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json'}
     var data= {email: this.state.email, password: this.state.password};
-    if(this.state.email && this.state.password){
+
+    if(this.state.email <3 || this.state.password <3){
+      this.setState({ 
+        visible: true,
+        error_message: 'Email i lozinka moraju biti veci od 3 znaka!'
+      });
+    }
+    else{
 
       axios
       .post(`${ApiUrl()}/signin`, data,{headers: headers})
@@ -69,14 +79,20 @@ class Login extends Component {
 
       })
       .catch(error => {
-        alert('Pogreska prilikom logiranja!');
+        this.setState({ 
+          visible: true,
+          error_message: 'Pogreska prilikom logiranja, neispravno uneseni podatci!'
+        });
+        //console.log(error);
+        //alert('Pogreska prilikom logiranja!');
       });
 
     }
-    else{
-      alert("Popunite polja");
-    }
     e.preventDefault();
+  }
+
+  onDismiss=()=> {
+    this.setState({ visible: false });
   }
 
   render() {
@@ -98,6 +114,9 @@ class Login extends Component {
             </div>
             <button type="submit" className="btn btn-secondary">Submit</button>
         </form>
+        <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss} fade={false}>
+            {this.state.error_message}
+        </Alert>
       </div>
     );
   }
