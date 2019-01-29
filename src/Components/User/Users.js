@@ -43,13 +43,24 @@ export class Users extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom dohvaćanja korisnika!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom dohvaćanja korisnika!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
     }
 
@@ -71,13 +82,24 @@ export class Users extends Component {
                                             color: 'success'
                                         }
         })).catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom brisanja korisnika!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom brisanja korisnika!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
     }
     onDismiss=()=> {

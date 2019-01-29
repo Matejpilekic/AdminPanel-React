@@ -82,21 +82,31 @@ export class UpdateAction extends Component {
                 });
             })
             .catch(error => {
-                if(error.response.status ===400){
+                if (error.response) { 
+                    if(error.response.status ===400){
+                        this.setState({ 
+                            visible: true,
+                            alert_message: {
+                                message: `Pogreska! ${error.response.data.message}`,
+                                color: 'danger'
+                            }
+                        });
+                    }else{
+                        this.setState({ 
+                            visible: true,
+                            alert_message: {
+                                message: `Pogreska prilikom azuriranja akcije!! ${error.response.data.message}`,
+                                color: 'danger'
+                            }
+                        });
+                    }
+                  } else {
                     this.setState({ 
                         visible: true,
                         alert_message: {
-                            message: `Pogreska! ${error.response.data.message}`,
-                            color: 'danger'
-                        }
-                    });
-                }else{
-                    this.setState({ 
-                        visible: true,
-                        alert_message: {
-                            message: `Pogreska prilikom kreiranja akcije!! ${error.response.data.message}`,
-                            color: 'danger'
-                        }
+                          message: `Pogreska !${error.message}`,
+                          color: 'danger'
+                          }
                     });
                 }
             });
@@ -124,13 +134,23 @@ export class UpdateAction extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom dohvaćanja mikrokontrolera!',
-                    color: 'danger'
-                }
-            });
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom dohvaćanja mikrokontrolera!',
+                        color: 'danger'
+                    }
+                });
+              } else {
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                      message: `Pogreska !${error.message}`,
+                      color: 'danger'
+                      }
+                });
+            }
         });
 
         if(typeof this.props.location.action !== 'undefined'){

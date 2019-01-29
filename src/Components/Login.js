@@ -79,15 +79,32 @@ class Login extends Component {
 
       })
       .catch(error => {
-        if(error.response.status===401){
+        console.log(error);
+        //console.log(error.message);
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          //console.log(error.response.data);
+          //console.log(error.response.status);
+          //console.log(error.response.headers);
+          if(error.response.status===401){
+            this.setState({ 
+              visible: true,
+              error_message: 'Pogreska prilikom logiranja, neispravni uneseni podatci!'
+            });
+          }else{
+            this.setState({ 
+              visible: true,
+              error_message: `Pogreska !${error.response.data.message}`
+            });
+          }
+        } else {
+          //console.log(error.request);
+          // Something happened in setting up the request that triggered an Error
+          //console.log('Error', error.message);
           this.setState({ 
             visible: true,
-            error_message: 'Pogreska prilikom logiranja, neispravni uneseni podatci!'
-          });
-        }else{
-          this.setState({ 
-            visible: true,
-            error_message: `Pogreska !${error.response.data.message}`
+            error_message: `Pogreska !${error.message}`
           });
         }
       });

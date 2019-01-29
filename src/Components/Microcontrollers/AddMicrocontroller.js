@@ -71,13 +71,22 @@ export class AddMicrocontroller extends Component {
         }
       })
       .catch(error => {
-        if(error.response.status ===400){
+        if (error.response) { 
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: `Pogreska! ${error.response.data.message}`,
+                    color: 'danger'
+                }
+            });
+        } 
+        else {
           this.setState({ 
               visible: true,
               alert_message: {
-                  message: `Pogreska! ${error.response.data.message}`,
-                  color: 'danger'
-              }
+                message: `Pogreska !${error.message}`,
+                color: 'danger'
+                }
           });
         }
         //console.log(error.response);

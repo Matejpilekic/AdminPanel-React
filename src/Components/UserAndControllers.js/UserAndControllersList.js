@@ -48,7 +48,24 @@ export class UserAndControllersList extends Component {
             }
         })
         .catch(function (error) {
-            console.log(error);
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: `Pogreska prilikom dohvacanja liste spojeni korisnika s mikrokontrolerima!`,
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
+                    color: 'danger'
+                    }
+              });
+            }
         });
     }
 
@@ -71,13 +88,24 @@ export class UserAndControllersList extends Component {
                                         }
         }))
           .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom odspajanja korisnika od mikrokontrolera!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom odspajanja korisnika od mikrokontrolera!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
     }
 

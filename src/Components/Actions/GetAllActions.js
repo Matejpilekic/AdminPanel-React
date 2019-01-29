@@ -42,13 +42,23 @@ export class GetAllActions extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška, prilikom dohvaćanja akcija!',
-                    color: 'danger'
-                }
-            });
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška, prilikom dohvaćanja akcija!',
+                        color: 'danger'
+                    }
+                });
+              } else {
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                      message: `Pogreska !${error.message}`,
+                      color: 'danger'
+                      }
+                });
+            }
         });
 
         
@@ -62,13 +72,23 @@ export class GetAllActions extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom dohvaćanja mikrokontrolera!',
-                    color: 'danger'
-                }
-            });
+            if (error.response) {
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom dohvaćanja mikrokontrolera!',
+                        color: 'danger'
+                    }
+                });
+              } else {
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                      message: `Pogreska !${error.message}`,
+                      color: 'danger'
+                      }
+                });
+            }
         });
     }
 
@@ -92,13 +112,23 @@ export class GetAllActions extends Component {
                                         }
         }))
           .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška, nemožete obrisati tu akciju!',
-                    color: 'danger'
-                }
-            });
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška, nemožete obrisati tu akciju!',
+                        color: 'danger'
+                    }
+                });
+              } else {
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                      message: `Pogreska !${error.message}`,
+                      color: 'danger'
+                      }
+                });
+            }
         });
     }
     onDismiss=()=> {

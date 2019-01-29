@@ -43,13 +43,24 @@ export class BindUserAndMicrocontroler extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Pogreška prilikom dohvaćanja mikrokontrolera!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Pogreška prilikom dohvaćanja mikrokontrolera!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
 
         axios.get(`${ApiUrl()}/users/`,{headers : headers})
@@ -62,13 +73,24 @@ export class BindUserAndMicrocontroler extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Pogreška prilikom dohvaćanja korisnika!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Pogreška prilikom dohvaćanja korisnika!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
     }
 
@@ -109,13 +131,24 @@ export class BindUserAndMicrocontroler extends Component {
                 }
             })
             .catch(error => {
-                this.setState({ 
-                    visible: true,
-                    alert_message: {
-                        message: `Pogreska prilikom spajanja korisnika i mikrokontrolera!`,
+                if (error.response) { 
+                    this.setState({ 
+                        visible: true,
+                        alert_message: {
+                            message: `Pogreska prilikom spajanja korisnika i mikrokontrolera!`,
+                            color: 'danger'
+                        }
+                    });
+                } 
+                else {
+                  this.setState({ 
+                      visible: true,
+                      alert_message: {
+                        message: `Pogreska !${error.message}`,
                         color: 'danger'
-                    }
-                });
+                        }
+                  });
+                }
             });
           }
           e.preventDefault();

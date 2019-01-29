@@ -43,13 +43,24 @@ export class Microcontrrollers extends Component {
             }
         })
         .catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom dohvaćanja svih mikrokontrolera!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom dohvaćanja svih mikrokontrolera!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
     }
 
@@ -71,13 +82,24 @@ export class Microcontrrollers extends Component {
                                             color: 'success'
                                         }
         })).catch(function (error) {
-            this.setState({ 
-                visible: true,
-                alert_message: {
-                    message: 'Dogodila se greška prilikom brisanja mikrokontrolera!',
+            if (error.response) { 
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: 'Dogodila se greška prilikom brisanja mikrokontrolera!',
+                        color: 'danger'
+                    }
+                });
+            } 
+            else {
+              this.setState({ 
+                  visible: true,
+                  alert_message: {
+                    message: `Pogreska !${error.message}`,
                     color: 'danger'
-                }
-            });
+                    }
+              });
+            }
         });
     }
 

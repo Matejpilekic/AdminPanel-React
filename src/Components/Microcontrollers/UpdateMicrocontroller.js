@@ -76,7 +76,7 @@ export class UpdateMicrocontroller extends Component {
                 }
             })
             .catch(error => {
-                if(error.response.status ===400){
+                if (error.response) { 
                     this.setState({ 
                         visible: true,
                         alert_message: {
@@ -84,6 +84,15 @@ export class UpdateMicrocontroller extends Component {
                             color: 'danger'
                         }
                     });
+                } 
+                else {
+                  this.setState({ 
+                      visible: true,
+                      alert_message: {
+                        message: `Pogreska !${error.message}`,
+                        color: 'danger'
+                        }
+                  });
                 }
                 //console.log(error.response);
             });
