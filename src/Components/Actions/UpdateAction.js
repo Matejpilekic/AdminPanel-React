@@ -183,8 +183,11 @@ export class UpdateAction extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="">Unesite vrstu </label>
-                    <input type="number" name="type" value={this.state.type} className="form-control" id="exampleInputSignal" placeholder="Unesite vrstu" onChange={this.onChange}/>
-
+                    <select className="form-control" value={this.state.type} name='type' id="exampleInputSignal" onChange={this.onChange}>
+                        <option value={null} ></option>
+                        <option value={1}>Drži signal</option>
+                        <option value={0}>Ne drži signal</option>
+                    </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="">Unesi naziv akcije</label> 

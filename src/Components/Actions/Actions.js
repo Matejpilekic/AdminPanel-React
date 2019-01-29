@@ -177,8 +177,8 @@ export class Actions extends Component {
                     <label htmlFor="">Unesite vrstu </label>
                     <select className="form-control" value={this.state.type} name='type' id="exampleInputSignal" onChange={this.onChange}>
                         <option value={null} ></option>
-                        <option value={0}>Drži signal</option>
-                        <option value={1}>Ne drži signal</option>
+                        <option value={1}>Drži signal</option>
+                        <option value={0}>Ne drži signal</option>
                     </select>
 
                 </div>

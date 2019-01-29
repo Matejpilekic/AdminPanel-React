@@ -4,7 +4,7 @@ import './App.css';
 import Login from './Components/Login';
 import Menu from './Components/Menu';
 import Header from './Components/Header';
-import {BrowserRouter,  Route,  Switch} from 'react-router-dom';
+import { Route,  Switch, HashRouter} from 'react-router-dom';
 import AddMicrocontroller from './Components/Microcontrollers/AddMicrocontroller';
 import Users from './Components/User/Users';
 import Actions from './Components/Actions/Actions';
@@ -49,7 +49,7 @@ class App extends Component {
     else{
       return (
         <div>
-          <BrowserRouter >
+          <HashRouter>
               <div>
                 <Menu />
                 <div className="page-container">
@@ -74,7 +74,7 @@ class App extends Component {
                 
                 </div>
               </div>
-          </BrowserRouter>
+          </HashRouter>
       </div>
         
       );
