@@ -38,7 +38,7 @@ class Login extends Component {
       'Content-Type': 'application/json'}
     var data= {email: this.state.email, password: this.state.password};
 
-    if(this.state.email <3 || this.state.password <3){
+    if(this.state.email.length <3 || this.state.password.length <3){
       this.setState({ 
         visible: true,
         error_message: 'Email i lozinka moraju biti veci od 3 znaka!'

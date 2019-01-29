@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ApiUrl from '../../ApiUrl';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 
 export class Microcontrrollers extends Component {
     state={
         microcontrollers: [],
         microcontroller: {},
-        modal: false
+        modal: false,
+        visible: false,
+        alert_message: {
+            message: '',
+            color: ''
+        }
     }
 
     toggle=()=> {
@@ -34,14 +39,17 @@ export class Microcontrrollers extends Component {
         }).then(json =>{
             if(json.status===200){
                 var data=json.data;
-                //console.log(data);
-                //numbers.map((number) => );
                 this.setState({microcontrollers: data});
-                //console.log(this.state);
             }
         })
         .catch(function (error) {
-            console.log(error);
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom dohvaćanja svih mikrokontrolera!',
+                    color: 'danger'
+                }
+            });
         });
     }
 
@@ -56,8 +64,25 @@ export class Microcontrrollers extends Component {
         }
         axios.delete(`${ApiUrl()}/controllers/${id}`,{headers: headers})
           .then(res => this.setState({ microcontrollers: [...this.state.microcontrollers.filter(microcontroller => microcontroller.id !== id)], 
-                                        modal: !this.state.modal
-        }));
+                                        modal: !this.state.modal,
+                                        visible: true,
+                                        alert_message: {
+                                            message: 'Uspiješno ste obrisali mikrokontroler!',
+                                            color: 'success'
+                                        }
+        })).catch(function (error) {
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom brisanja mikrokontrolera!',
+                    color: 'danger'
+                }
+            });
+        });
+    }
+
+    onDismiss=()=> {
+        this.setState({ visible: false });
     }
 
 
@@ -94,21 +119,24 @@ export class Microcontrrollers extends Component {
     </tr>); 
     return (
         <div>
-        <table className="table">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">Ime</th>
-            <th scope="col">Token</th>
-            <th scope="col">Domena</th>
-            <th scope="col">Port</th>
-            <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {listItems}
-        </tbody>
-        </table>
+            <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
+                {this.state.alert_message.message}
+            </Alert>
+            <table className="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Ime</th>
+                <th scope="col">Token</th>
+                <th scope="col">Domena</th>
+                <th scope="col">Port</th>
+                <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {listItems}
+            </tbody>
+            </table>
       </div>
     )
   }

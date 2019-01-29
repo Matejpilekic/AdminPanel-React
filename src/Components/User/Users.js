@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ApiUrl from '../../ApiUrl';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 export class Users extends Component {
     constructor(props){
         super(props);
         this.state={
             users: [],
-            modal: false
+            modal: false,
+            visible: false,
+            alert_message: {
+                message: '',
+                color: ''
+            }
         }
       }
 
@@ -34,14 +39,17 @@ export class Users extends Component {
         }).then(json =>{
             if(json.status===200){
                 var data=json.data;
-                //console.log(data);
-                //numbers.map((number) => );
                 this.setState({users: data});
-                //console.log(this.state);
             }
         })
         .catch(function (error) {
-            console.log(error);
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom dohvaćanja korisnika!',
+                    color: 'danger'
+                }
+            });
         });
     }
 
@@ -56,8 +64,24 @@ export class Users extends Component {
         }
         axios.delete(`http://104.248.21.187:8080/admin/users/${id}`,{headers: headers})
           .then(res => this.setState({ users: [...this.state.users.filter(user => user.id !== id)],
-                                        modal: !this.state.modal
-        }));
+                                        modal: !this.state.modal,
+                                        visible: true,
+                                        alert_message: {
+                                            message: 'Uspiješno ste obrisali korisnika!',
+                                            color: 'success'
+                                        }
+        })).catch(function (error) {
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom brisanja korisnika!',
+                    color: 'danger'
+                }
+            });
+        });
+    }
+    onDismiss=()=> {
+        this.setState({ visible: false });
     }
     
   render() {
@@ -85,6 +109,9 @@ export class Users extends Component {
 
     return (
       <div>
+        <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
+            {this.state.alert_message.message}
+        </Alert>
         <table className="table">
         <thead>
             <tr>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ApiUrl from '../../ApiUrl';
+import { Alert } from 'reactstrap';
 
 export class BindUserAndMicrocontroler extends Component {
 
@@ -8,7 +9,12 @@ export class BindUserAndMicrocontroler extends Component {
         user_id : null,
         controller_id: null,
         microcontrollers: [],
-        users: []
+        users: [],
+        visible: false,
+        alert_message: {
+            message: '',
+            color: ''
+        }
     }
 
     onChange=(e)=>{
@@ -33,14 +39,17 @@ export class BindUserAndMicrocontroler extends Component {
         }).then(json =>{
             if(json.status===200){
                 var data=json.data;
-                //console.log(data);
-                //numbers.map((number) => );
                 this.setState({microcontrollers: data});
-                //console.log(this.state);
             }
         })
         .catch(function (error) {
-            console.log(error);
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Pogreška prilikom dohvaćanja mikrokontrolera!',
+                    color: 'danger'
+                }
+            });
         });
 
         axios.get(`${ApiUrl()}/users/`,{headers : headers})
@@ -49,14 +58,17 @@ export class BindUserAndMicrocontroler extends Component {
         }).then(json =>{
             if(json.status===200){
                 var data=json.data;
-                //console.log(data);
-                //numbers.map((number) => );
                 this.setState({users: data});
-                //console.log(this.state);
             }
         })
         .catch(function (error) {
-            console.log(error);
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Pogreška prilikom dohvaćanja korisnika!',
+                    color: 'danger'
+                }
+            });
         });
     }
 
@@ -74,23 +86,43 @@ export class BindUserAndMicrocontroler extends Component {
         var data= {user_id: parseInt(this.state.user_id), controller_id: parseInt(this.state.controller_id)};
         //console.log(data);
           if(isNaN(data.user_id)|| isNaN(data.controller_id)){
-            alert("Popunite polja");
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Unesite korisnika i mikrokontroler!',
+                    color: 'danger'
+                }
+            });
           }
           else{
             axios
             .post(`${ApiUrl()}/controllers/bind`, data,{headers: headers})
             .then(response => {
-              //console.log(response);
-              //return response;
               if(response.status===200 || response.statusText==='OK'){
-                  alert ("Uspijesno ste spojili korisnika s kontorlerom");
-              }
+                  this.setState({ 
+                        visible: true,
+                        alert_message: {
+                            message: `Uspiješno ste spojili korisnika s mikrokontorlerom!`,
+                            color: 'success'
+                        }
+                    });
+                }
             })
             .catch(error => {
-              alert('Pogreska prilikom spajanja korisnika i mikrokontrolera!');
+                this.setState({ 
+                    visible: true,
+                    alert_message: {
+                        message: `Pogreska prilikom spajanja korisnika i mikrokontrolera!`,
+                        color: 'danger'
+                    }
+                });
             });
           }
           e.preventDefault();
+    }
+
+    onDismiss=()=> {
+        this.setState({ visible: false });
     }
 
   render() {
@@ -104,7 +136,10 @@ export class BindUserAndMicrocontroler extends Component {
 
     return (
       <div>
-          <form onSubmit={this.bindUsersAndMicrocontroller}>
+        <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
+            {this.state.alert_message.message}
+        </Alert>
+        <form onSubmit={this.bindUsersAndMicrocontroller}>
 
           <div className="form-group">
                 <label htmlFor="exampleFormControlSelect2">Unesite mikrokontroler</label>

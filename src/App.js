@@ -14,6 +14,7 @@ import Microcontrrollers from './Components/Microcontrollers/Microcontrollers';
 import UpdateMicrocontroller from './Components/Microcontrollers/UpdateMicrocontroller';
 import Home from './Components/Home';
 import UserAndControllersList from './Components/UserAndControllers.js/UserAndControllersList';
+import UpdateAction from './Components/Actions/UpdateAction';
 
 class App extends Component {
 
@@ -64,7 +65,8 @@ class App extends Component {
                           <Route path='/BindUserAndMicrocontroler' component={BindUserAndMicrocontroler} />
                           <Route path='/usersAndMicrocontrllers' component={UserAndControllersList} />
                           <Route path='/controllers' component={Microcontrrollers} />
-                          <Route path='/updatecontroller' component={UpdateMicrocontroller} />  
+                          <Route path='/updatecontroller' component={UpdateMicrocontroller} />
+                          <Route path='/updateAction' component={UpdateAction} />   
                       </Switch>
 
                       </div>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {uid} from 'react-uid';
 import ApiUrl from '../../ApiUrl';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 export class UserAndControllersList extends Component {
 
@@ -10,7 +10,12 @@ export class UserAndControllersList extends Component {
         super(props);
         this.state={
             usersAndControllers: [],
-            modal: false
+            modal: false,
+            visible: false,
+            alert_message: {
+                message: '',
+                color: ''
+            }
         }
     }
 
@@ -58,12 +63,26 @@ export class UserAndControllersList extends Component {
         }
         axios.post(`${ApiUrl()}/controllers/unbind`,{user_id: idu, controller_id: idc},{headers: headers})
           .then(res => this.setState({ usersAndControllers: [...this.state.usersAndControllers.filter(userAM => userAM.user.id !== idu || userAM.micro_controller.id !== idc )],
-                                        modal: !this.state.modal
+                                        modal: !this.state.modal,
+                                        visible: true,
+                                        alert_message: {
+                                            message: 'Uspiješno ste odspojili korisnika od mikrokontrolera!',
+                                            color: 'success'
+                                        }
         }))
           .catch(function (error) {
-            //console.log(error);
-            alert('Dogodila se greška');
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom odspajanja korisnika od mikrokontrolera!',
+                    color: 'danger'
+                }
+            });
         });
+    }
+
+    onDismiss=()=> {
+        this.setState({ visible: false });
     }
 
 
@@ -92,6 +111,9 @@ export class UserAndControllersList extends Component {
 
     return (
       <div>
+        <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
+            {this.state.alert_message.message}
+        </Alert>
         <table className="table">
         <thead>
             <tr>

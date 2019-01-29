@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import ApiUrl from '../../ApiUrl';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 export class GetAllActions extends Component {
     state={
         actions: [],
         microcontrollers: [],
-        modal: false
+        modal: false,
+        visible: false,
+            alert_message: {
+                message: '',
+                color: ''
+        }
     }
 
     toggle=()=> {
@@ -33,14 +38,17 @@ export class GetAllActions extends Component {
         }).then(json =>{
             if(json.status===200){
                 var data=json.data;
-                //console.log(data);
-                //numbers.map((number) => );
                 this.setState({actions: data});
-                //console.log(this.state);
             }
         })
         .catch(function (error) {
-            console.log(error);
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška, prilikom dohvaćanja akcija!',
+                    color: 'danger'
+                }
+            });
         });
 
         
@@ -50,14 +58,17 @@ export class GetAllActions extends Component {
         }).then(json =>{
             if(json.status===200){
                 var data=json.data;
-                //console.log(data);
-                //numbers.map((number) => );
                 this.setState({microcontrollers: data});
-                //console.log(this.state);
             }
         })
         .catch(function (error) {
-            console.log(error);
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom dohvaćanja mikrokontrolera!',
+                    color: 'danger'
+                }
+            });
         });
     }
 
@@ -73,13 +84,28 @@ export class GetAllActions extends Component {
         }
         axios.delete(`${ApiUrl()}/actions/${id}`,{headers: headers})
           .then(res => this.setState({ actions: [...this.state.actions.filter(action => action.id !== id)],
-                                        modal: !this.state.modal
+                                        modal: !this.state.modal,
+                                        visible: true,
+                                        alert_message: {
+                                            message: 'Uspiješno ste obrisali akciju!',
+                                            color: 'success'
+                                        }
         }))
           .catch(function (error) {
-            console.log(error);
-            alert('Dogodila se greška, nemožete obrisati tu akciju');
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška, nemožete obrisati tu akciju!',
+                    color: 'danger'
+                }
+            });
         });
     }
+    onDismiss=()=> {
+        this.setState({ visible: false });
+    }
+
+
   render() {
 
     const listItems = this.state.actions.map((data) =>
@@ -107,7 +133,7 @@ export class GetAllActions extends Component {
             </td>  
             <td><button className='btn btn-secondary colortextbtn'><Link
                 to={{
-                    pathname: "/addAction",
+                    pathname: "/updateAction",
                     action: { data }
                 }}
                 >Azuriraj</Link></button>
@@ -116,22 +142,25 @@ export class GetAllActions extends Component {
 
     return (
         <div>
-        <table className="table">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">Pin</th>
-            <th scope="col">Vrsta</th>
-            <th scope="col">Ime</th>
-            <th scope="col">Mikrokontroler</th>
-            <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {listItems}
-        </tbody>
-        </table>
-      </div>
+            <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
+                {this.state.alert_message.message}
+            </Alert>
+            <table className="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Pin</th>
+                <th scope="col">Vrsta</th>
+                <th scope="col">Ime</th>
+                <th scope="col">Mikrokontroler</th>
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {listItems}
+            </tbody>
+            </table>
+        </div>
     )
   }
 }

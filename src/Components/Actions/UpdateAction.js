@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 import ApiUrl from '../../ApiUrl';
 import { Alert } from 'reactstrap';
-import {Link} from 'react-router-dom';
 
-export class Actions extends Component {
+export class UpdateAction extends Component {
+
     state={
+        id: false,
         pin: '',
         type: '',
         name: '',
@@ -24,7 +26,13 @@ export class Actions extends Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    addAction=(e)=>{
+    updateAction=(e)=>{
+        var data={
+            pin: parseInt(this.state.pin),
+            type: parseInt(this.state.type),
+            name: this.state.name,
+            controller_id: parseInt(this.state.controller_id)
+        }
         var usersession= JSON.parse(sessionStorage.getItem('userData'));
         var token = usersession.login_token;
 
@@ -34,10 +42,8 @@ export class Actions extends Component {
             'Authorization': `Bearer ${token}`
         }
 
-        var data= {pin: parseInt(this.state.pin), type: parseInt(this.state.type), name: this.state.name, controller_id: parseInt(this.state.controller_id)};
-        //console.log(data);
-          if(isNaN(data.pin) || isNaN(data.type) || data.name==='' ||  isNaN(data.controller_id) ){
-            //alert("Popunite polja");
+        var id=this.props.location.action.data.id;
+        if(isNaN(data.pin) || isNaN(data.type) || data.name ==='' || isNaN(data.controller_id)){
             this.setState({ 
                 visible: true,
                 alert_message: {
@@ -45,8 +51,8 @@ export class Actions extends Component {
                     color: 'danger'
                 }
             });
-          }
-          else if(data.pin < 2 || data.pin > 13){
+        }
+        else if(data.pin < 2 || data.pin > 13){
             this.setState({ 
                 visible: true,
                 alert_message: {
@@ -64,19 +70,16 @@ export class Actions extends Component {
                 }
             });
           }
-          else{
-            axios
-            .post(`${ApiUrl()}/actions/`, data,{headers: headers})
+        else{
+            axios.put(`${ApiUrl()}/actions/${id}`,data ,{headers: headers})
             .then(response => {
-              if(response.status===200 || response.statusText==='OK'){
                 this.setState({ 
                     visible: true,
                     alert_message: {
-                        message: "Uspijesno ste dodali akciju s imenom "+response.data.name+" vrstom "+response.data.type+" i pinom "+response.data.pin+" ",
+                        message: `Uspijesno ste azurirali akciju s nazivom  ${data.name}`,
                         success: 'success'
                     }
                 });
-              }
             })
             .catch(error => {
                 if(error.response.status ===400){
@@ -97,8 +100,8 @@ export class Actions extends Component {
                     });
                 }
             });
-          }
-          e.preventDefault();
+        }
+        e.preventDefault();
     }
 
 
@@ -129,23 +132,30 @@ export class Actions extends Component {
                 }
             });
         });
+
+        if(typeof this.props.location.action !== 'undefined'){
+            this.setState({
+                id: true,
+                pin: this.props.location.action.data.pin,
+                type: this.props.location.action.data.type,
+                name: this.props.location.action.data.name,
+                controller_id: this.props.location.action.data.controller_id});
+        }
     }
+
     onDismiss=()=> {
         this.setState({ visible: false });
     }
 
-
-
   render() {
     const listControllers = this.state.microcontrollers.map((data) =>
     <option key={data.id} value={data.id}>{data.name}</option>);
-
-        return (
-            <div>
-                <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={false}>
-                    {this.state.alert_message.message}
-                </Alert>
-            <form onSubmit={this.addAction}>
+    return (
+        <div>
+            <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
+                {this.state.alert_message.message}
+            </Alert>
+            <form onSubmit={this.updateAction}>
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Unesi pin kontrolera</label>
                     <input type="number" name="pin" value={this.state.pin} className="form-control" id="exampleInputEmail1" placeholder="Unesi pin kontrolera" onChange={this.onChange} />
@@ -153,16 +163,12 @@ export class Actions extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="">Unesite vrstu </label>
-                    <select className="form-control" value={this.state.type} name='type' id="exampleInputSignal" onChange={this.onChange}>
-                        <option value={null} ></option>
-                        <option value={0}>Drži signal</option>
-                        <option value={1}>Ne drži signal</option>
-                    </select>
+                    <input type="number" name="type" value={this.state.type} className="form-control" id="exampleInputSignal" placeholder="Unesite vrstu" onChange={this.onChange}/>
 
                 </div>
                 <div className="form-group">
                     <label htmlFor="">Unesi naziv akcije</label> 
-                    <input type="text" name="name" value={this.state.name} className="form-control" id="exampleInputSignal1" placeholder="Unesite naziv akcije" onChange={this.onChange}/>
+                    <input type="text" name="name" value={this.state.name} className="form-control" id="exampleInputSignal" placeholder="Unesite naziv akcije" onChange={this.onChange}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect2">Unesite kontroler</label>
@@ -171,12 +177,12 @@ export class Actions extends Component {
                         {listControllers}
                     </select>
                 </div>
-                    <button type="submit" className="btn btn-secondary">Spremi</button>
+                <button type="submit" className="btn btn-secondary">Spremi</button>
             </form>
-            <button className="btn btn-secondary colortextbtn mybtn"><Link to='/actions'>Lista akcija</Link></button>
+            <button className="btn btn-secondary colortextbtn mybtn"><Link to='/actions'>Nazad</Link></button>
         </div>
-        );   
+    )
   }
 }
 
-export default Actions
+export default UpdateAction
