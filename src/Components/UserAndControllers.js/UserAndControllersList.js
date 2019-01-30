@@ -140,19 +140,21 @@ export class UserAndControllersList extends Component {
         <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
             {this.state.alert_message.message}
         </Alert>
-        <table className="table">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">Full Name</th>
-            <th scope="col">E-mail</th>
-            <th scope="col">Mikrokontroler</th>
-            </tr>
-        </thead>
-        <tbody>
-            {listItems}
-        </tbody>
-        </table>
+        <div className="table-responsive-lg">
+            <table className="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Mikrokontroler</th>
+                </tr>
+            </thead>
+            <tbody>
+                {listItems}
+            </tbody>
+            </table>
+        </div>
       </div>
     )
   }

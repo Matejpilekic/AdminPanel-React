@@ -79,7 +79,7 @@ class Login extends Component {
 
       })
       .catch(error => {
-        console.log(error);
+        //console.log(error);
         //console.log(error.message);
         if (error.response) {
           // The request was made and the server responded with a status code

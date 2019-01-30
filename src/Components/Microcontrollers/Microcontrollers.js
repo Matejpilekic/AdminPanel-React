@@ -141,21 +141,23 @@ export class Microcontrrollers extends Component {
             <Alert color={this.state.alert_message.color} isOpen={this.state.visible} toggle={this.onDismiss} fade={true}>
                 {this.state.alert_message.message}
             </Alert>
-            <table className="table">
-            <thead>
-                <tr>
-                <th scope="col">#</th>
-                <th scope="col">Ime</th>
-                <th scope="col">Token</th>
-                <th scope="col">Domena</th>
-                <th scope="col">Port</th>
-                <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {listItems}
-            </tbody>
-            </table>
+            <div className="table-responsive-lg">
+                <table className="table">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ime</th>
+                    <th scope="col">Token</th>
+                    <th scope="col">Domena</th>
+                    <th scope="col">Port</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {listItems}
+                </tbody>
+                </table>
+            </div>
       </div>
     )
   }
