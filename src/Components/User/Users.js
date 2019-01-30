@@ -34,23 +34,21 @@ export class Users extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.get(`${ApiUrl()}/users/`,{headers : headers})
-        .then(function (response) {
-            return response;
-        }).then(json =>{
+        .then(json =>{
             if(json.status===200){
                 var data=json.data;
                 this.setState({users: data});
             }
         })
-        .catch(function (error) {
+        .catch((error)=> {
             if (error.response) { 
                 this.setState({ 
-                    visible: true,
-                    alert_message: {
-                        message: 'Dogodila se greška prilikom dohvaćanja korisnika!',
-                        color: 'danger'
-                    }
-                });
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom dohvaćanja korisnika!',
+                    color: 'danger'
+                }
+            });
             } 
             else {
               this.setState({ 
@@ -81,12 +79,12 @@ export class Users extends Component {
                                             message: 'Uspiješno ste obrisali korisnika!',
                                             color: 'success'
                                         }
-        })).catch(function (error) {
+        })).catch((error)=> {
             if (error.response) { 
                 this.setState({ 
                     visible: true,
                     alert_message: {
-                        message: 'Dogodila se greška prilikom brisanja korisnika!',
+                        message: `Pogreska! ${error.response.data.message}`,
                         color: 'danger'
                     }
                 });
@@ -100,6 +98,13 @@ export class Users extends Component {
                     }
               });
             }
+            this.setState({ 
+                visible: true,
+                alert_message: {
+                    message: 'Dogodila se greška prilikom brisanja korisnika!',
+                    color: 'danger'
+                }
+            });
         });
     }
     onDismiss=()=> {

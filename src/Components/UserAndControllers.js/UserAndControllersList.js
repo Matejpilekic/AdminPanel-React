@@ -36,9 +36,7 @@ export class UserAndControllersList extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.get(`${ApiUrl()}/users-microcontrollers`,{headers : headers})
-        .then(function (response) {
-            return response;
-        }).then(json =>{
+        .then(json =>{
             if(json.status===200){
                 var data=json.data;
                 //console.log(data);
@@ -47,7 +45,7 @@ export class UserAndControllersList extends Component {
                 //console.log(this.state);
             }
         })
-        .catch(function (error) {
+        .catch((error)=> {
             if (error.response) { 
                 this.setState({ 
                     visible: true,
@@ -87,7 +85,7 @@ export class UserAndControllersList extends Component {
                                             color: 'success'
                                         }
         }))
-          .catch(function (error) {
+          .catch((error)=> {
             if (error.response) { 
                 this.setState({ 
                     visible: true,

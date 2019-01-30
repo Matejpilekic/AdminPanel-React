@@ -34,15 +34,13 @@ export class Microcontrrollers extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.get(`${ApiUrl()}/controllers/`,{headers : headers})
-        .then(function (response) {
-            return response;
-        }).then(json =>{
+        .then(json =>{
             if(json.status===200){
                 var data=json.data;
                 this.setState({microcontrollers: data});
             }
         })
-        .catch(function (error) {
+        .catch((error)=> {
             if (error.response) { 
                 this.setState({ 
                     visible: true,
@@ -81,7 +79,7 @@ export class Microcontrrollers extends Component {
                                             message: 'Uspiješno ste obrisali mikrokontroler!',
                                             color: 'success'
                                         }
-        })).catch(function (error) {
+        })).catch((error)=> {
             if (error.response) { 
                 this.setState({ 
                     visible: true,

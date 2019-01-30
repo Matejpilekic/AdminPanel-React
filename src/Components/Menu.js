@@ -20,16 +20,15 @@ export class Menu extends Component {
         }));
     }
 
-
   render() {
     return (
-        <aside className="menu-sidebar">
+        <aside className="menu-sidebar" >
             <div className="logo">
                 <p href="#">
                     Admin Panel
                 </p>
             </div>
-            <div className="menu-sidebar__content js-scrollbar1">
+            <div className="menu-sidebar__content js-scrollbar1"> 
                 <nav className="navbar-sidebar">
 
                     <Dropdown isOpen={this.state.dropdownOpenMicrocontrollers} toggle={this.toggleMicrocontroller}>

@@ -130,7 +130,7 @@ export class Actions extends Component {
                 this.setState({microcontrollers: data});
             }
         })
-        .catch(function (error) {
+        .catch((error)=> {
             if (error.response) {
                 
                 this.setState({ 

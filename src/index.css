@@ -87,6 +87,8 @@ code {
   color: #4272d7;
 }
 
+
+
 /* PAGE CONTAINER*/
 
 .page-container {
@@ -112,6 +114,9 @@ code {
   padding-top: 116px;
   min-height: 100vh;
   padding-bottom: 20px;
+}
+.menu_mobile_sidebar{
+  display: none;
 }
 
 
@@ -165,5 +170,7 @@ code {
 .colorTd{
   background-color: #f7f7f7;
 }
+
+
 
 

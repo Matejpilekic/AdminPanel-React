@@ -33,15 +33,13 @@ export class GetAllActions extends Component {
             'Authorization': `Bearer ${token}`
         }
         axios.get(`${ApiUrl()}/actions/`,{headers : headers})
-        .then(function (response) {
-            return response;
-        }).then(json =>{
+        .then(json =>{
             if(json.status===200){
                 var data=json.data;
                 this.setState({actions: data});
             }
         })
-        .catch(function (error) {
+        .catch((error)=> {
             if (error.response) { 
                 this.setState({ 
                     visible: true,
@@ -63,15 +61,13 @@ export class GetAllActions extends Component {
 
         
         axios.get(`${ApiUrl()}/controllers/`,{headers : headers})
-        .then(function (response) {
-            return response;
-        }).then(json =>{
+        .then(json =>{
             if(json.status===200){
                 var data=json.data;
                 this.setState({microcontrollers: data});
             }
         })
-        .catch(function (error) {
+        .catch((error)=> {
             if (error.response) {
                 this.setState({ 
                     visible: true,
@@ -111,7 +107,7 @@ export class GetAllActions extends Component {
                                             color: 'success'
                                         }
         }))
-          .catch(function (error) {
+          .catch((error)=>{
             if (error.response) { 
                 this.setState({ 
                     visible: true,
