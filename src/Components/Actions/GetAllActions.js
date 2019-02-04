@@ -9,6 +9,7 @@ export class GetAllActions extends Component {
         actions: [],
         microcontrollers: [],
         modal: false,
+        row: null,
         visible: false,
             alert_message: {
                 message: '',
@@ -131,6 +132,11 @@ export class GetAllActions extends Component {
         this.setState({ visible: false });
     }
 
+    setRow = (data, event) =>{
+        this.setState({ modal: !this.state.modal,
+            row: data });
+    }
+
 
   render() {
 
@@ -144,18 +150,8 @@ export class GetAllActions extends Component {
                     {if(datacontroller.id===data.controller_id) 
                         return datacontroller.name}
               )}</td>
-            <td>
-                <Button color="danger" onClick={this.toggle}>Obriši</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Obiši</ModalHeader>
-                <ModalBody>
-                    Jeste li sigurni da želite obrisati akciju {data.name}?
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={this.delAction.bind(this, data.id)}>Da obriši</Button>{' '}
-                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
-                </ModalFooter>
-                </Modal>
+            <td> 
+                <Button color="danger" onClick={this.setRow.bind(null,data)}>Obriši</Button>
             </td>  
             <td><button className='btn btn-secondary colortextbtn'><Link
                 to={{
@@ -187,6 +183,17 @@ export class GetAllActions extends Component {
                     {listItems}
                 </tbody>
                 </table>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                    <ModalHeader toggle={this.toggle}>Obriši</ModalHeader>
+                    <ModalBody>
+                        Jeste li sigurni da želite obrisati akciju {this.state.row ===null ? '' : this.state.row.name}?
+                    </ModalBody>
+                    <ModalFooter>
+                        
+                        <Button color="primary" value={this.state.row ===null ? '' : this.state.row.id} onClick={this.delAction.bind(this, this.state.row ===null ? '' : this.state.row.id)}>Da obriši</Button>
+                        <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                    </ModalFooter>
+                </Modal>
             </div>
         </div>
     )

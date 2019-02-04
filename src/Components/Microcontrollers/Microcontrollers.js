@@ -11,6 +11,7 @@ export class Microcontrrollers extends Component {
         microcontroller: {},
         modal: false,
         visible: false,
+        row: null,
         alert_message: {
             message: '',
             color: ''
@@ -104,6 +105,10 @@ export class Microcontrrollers extends Component {
     onDismiss=()=> {
         this.setState({ visible: false });
     }
+    setRow = (data, event) =>{
+        this.setState({ modal: !this.state.modal,
+            row: data });
+    }
 
   render() {
 
@@ -116,17 +121,7 @@ export class Microcontrrollers extends Component {
             <td>{data.domain}</td>
             <td>{data.port}</td>
             <td>
-                <Button color="danger" onClick={this.toggle}>Obriši</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Obiši</ModalHeader>
-                <ModalBody>
-                    Jeste li sigurni da želite obrisati mikrokontroler {data.name}?
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={this.delMicrocontroller.bind(this, data.id)}>Da obriši</Button>{' '}
-                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
-                </ModalFooter>
-                </Modal>
+                <Button color="danger" onClick={this.setRow.bind(null,data)}>Obriši</Button>
             </td>
             <td><button className='btn btn-secondary colortextbtn'><Link
                 to={{
@@ -157,6 +152,16 @@ export class Microcontrrollers extends Component {
                     {listItems}
                 </tbody>
                 </table>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                    <ModalHeader toggle={this.toggle}>Obriši</ModalHeader>
+                    <ModalBody>
+                        Jeste li sigurni da želite obrisati akciju {this.state.row ===null ? '' : this.state.row.name}?
+                    </ModalBody>
+                    <ModalFooter>    
+                        <Button color="primary" value={this.state.row ===null ? '' : this.state.row.id} onClick={this.delMicrocontroller.bind(this, this.state.row ===null ? '' : this.state.row.id)}>Da obriši</Button>
+                        <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                    </ModalFooter>
+                </Modal>
             </div>
       </div>
     )

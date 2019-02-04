@@ -77,13 +77,23 @@ export class UpdateMicrocontroller extends Component {
             })
             .catch(error => {
                 if (error.response) { 
-                    this.setState({ 
-                        visible: true,
-                        alert_message: {
-                            message: `Pogreska! ${error.response.data.message}`,
-                            color: 'danger'
-                        }
-                    });
+                    if(error.response.data.port){
+                        this.setState({ 
+                          visible: true,
+                          alert_message: {
+                               message: `Pogreska! ${error.response.data.port}`,
+                              color: 'danger'
+                          }
+                        });
+                    }else{
+                        this.setState({ 
+                          visible: true,
+                          alert_message: {
+                              message: `Pogreska! ${error.response.data.message}`,
+                              color: 'danger'
+                          }
+                        });
+                    }
                 } 
                 else {
                   this.setState({ 

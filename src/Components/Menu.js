@@ -35,7 +35,7 @@ export class Menu extends Component {
                     Admin Panel
                 </p>
             </div>
-            <div className="menu-sidebar__content js-scrollbar1" style={{display: this.state.isOpen ? 'none' : 'block'}}> 
+            <div style={{display: this.state.isOpen ? 'none' : 'block'}} className="menu-sidebar__content js-scrollbar1"> 
                 <nav className="navbar-sidebar">
 
                     <Dropdown isOpen={this.state.dropdownOpenMicrocontrollers} toggle={this.toggleMicrocontroller}>

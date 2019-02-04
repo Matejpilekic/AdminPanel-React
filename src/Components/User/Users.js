@@ -10,6 +10,7 @@ export class Users extends Component {
             users: [],
             modal: false,
             visible: false,
+            row: null,
             alert_message: {
                 message: '',
                 color: ''
@@ -110,6 +111,11 @@ export class Users extends Component {
     onDismiss=()=> {
         this.setState({ visible: false });
     }
+
+    setRow = (data, event) =>{
+        this.setState({ modal: !this.state.modal,
+            row: data });
+    }
     
   render() {
     
@@ -120,17 +126,7 @@ export class Users extends Component {
             <td>{data.email}</td>
             <td>{data.uuid}</td>
             <td>
-                <Button color="danger" onClick={this.toggle}>Obriši</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Obiši</ModalHeader>
-                <ModalBody>
-                    Jeste li sigurni da želite obrisati korisnika {data.full_name}?
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={this.delUser.bind(this, data.id)}>Da obriši</Button>{' '}
-                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
-                </ModalFooter>
-                </Modal>
+                <Button color="danger" onClick={this.setRow.bind(null,data)}>Obriši</Button>
             </td> 
     </tr>);
 
@@ -154,6 +150,16 @@ export class Users extends Component {
                 {listItems}
             </tbody>
             </table>
+            <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>Obriši</ModalHeader>
+                <ModalBody>
+                    Jeste li sigurni da želite obrisati akciju {this.state.row ===null ? '' : this.state.row.full_name}?
+                </ModalBody>
+                <ModalFooter>    
+                    <Button color="primary" value={this.state.row ===null ? '' : this.state.row.id} onClick={this.delUser.bind(this, this.state.row ===null ? '' : this.state.row.id)}>Da obriši</Button>
+                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                </ModalFooter>
+            </Modal>
         </div>
     </div>
     )

@@ -135,7 +135,7 @@ export class BindUserAndMicrocontroler extends Component {
                     this.setState({ 
                         visible: true,
                         alert_message: {
-                            message: `Pogreska prilikom spajanja korisnika i mikrokontrolera!`,
+                            message: `Pogreska prilikom spajanja korisnika i mikrokontrolera!${error.response.data.message}`,
                             color: 'danger'
                         }
                     });

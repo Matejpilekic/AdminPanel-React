@@ -12,6 +12,7 @@ export class UserAndControllersList extends Component {
             usersAndControllers: [],
             modal: false,
             visible: false,
+            row: null,
             alert_message: {
                 message: '',
                 color: ''
@@ -110,6 +111,10 @@ export class UserAndControllersList extends Component {
     onDismiss=()=> {
         this.setState({ visible: false });
     }
+    setRow = (data, event) =>{
+        this.setState({ modal: !this.state.modal,
+            row: data });
+    }
 
 
   render() {
@@ -121,17 +126,7 @@ export class UserAndControllersList extends Component {
             <td>{data.user.email}</td>
             <td>{data.micro_controller.name}</td>
             <td>
-                <Button color="danger" onClick={this.toggle}>Odspoji korisnika</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Odspoji korisnika</ModalHeader>
-                <ModalBody>
-                    Jeste li sigurni da želite odspojiti korisnika {data.user.full_name} s mikrokontrolera {data.micro_controller.name}?
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={this.unBind.bind(this, data.user.id, data.micro_controller.id)}>Da odspoji korisnika</Button>{' '}
-                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
-                </ModalFooter>
-                </Modal>
+                <Button color="danger" onClick={this.setRow.bind(null,data)}>Odspoji korisnika</Button>
             </td> 
     </tr>);
 
@@ -154,6 +149,16 @@ export class UserAndControllersList extends Component {
                 {listItems}
             </tbody>
             </table>
+            <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>Obriši</ModalHeader>
+                <ModalBody>
+                    Jeste li sigurni da želite odspojiti korisnika {this.state.row ===null ? '' : this.state.row.user.full_name} s mikrokontrolera {this.state.row ===null ? '' : this.state.row.micro_controller.name}?
+                </ModalBody>
+                <ModalFooter>  
+                    <Button color="primary" value={this.state.row ===null ? '' : this.state.row.id} onClick={this.unBind.bind(this, this.state.row ===null ? '' : this.state.row.user.id, this.state.row ===null ? '' : this.state.row.micro_controller.id)}>Da odspoji</Button>
+                    <Button color="secondary" onClick={this.toggle}>Prekini</Button>
+                </ModalFooter>
+            </Modal>
         </div>
       </div>
     )
